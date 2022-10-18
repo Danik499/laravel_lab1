@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -14,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get();
+        $users = User::simplePaginate(5);
         return view('index', compact('users'));
     }
 
@@ -36,13 +37,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $hashedPassword = password_hash($request->password, PASSWORD_DEFAULT);
+        $user = $request->all();
+        $user['password'] = Hash::make($request->password);
 
-        User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => $hashedPassword
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
         ]);
+
+        User::create($user);
         return redirect()->route('users.index');
     }
 
@@ -77,7 +81,29 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->update($request->only(['name', 'email']));
+        if (!isset($request->confirmPassword) && !isset($request->password)) {
+            $validated = $request->validate([
+                'name' => 'required',
+                'email' => 'required'
+            ]);
+            $user->update($request->only(['name', 'email']));
+        } else {
+            $validated = $request->validate([
+                'name' => 'required',
+                'email' => 'required',
+                'confirmPassword' => 'required|min:6',
+                'password' => 'required|min:6'
+            ]);
+
+            if (Hash::check($request->confirmPassword, $user->password)) {
+                $request['password'] = Hash::make($request->password);
+                $user->update($request->only(['name', 'email', 'password']));
+            } else {
+                return "Passwords do not match!";
+            }
+
+        }
+
         return redirect()->route('users.index');
     }
 

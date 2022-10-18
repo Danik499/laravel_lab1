@@ -20,15 +20,19 @@
             <td><a href="{{ route('users.show', $user) }}">{{ $user->name }}</a></td>
             <td>{{ $user->email }}</td>
             <td>
+                <a href="{{ route('users.edit', $user) }}">Edit</a>
+            </td>
+            <td>
                 <form method="POST" action="{{ route('users.destroy', $user) }}">
-                    <a href="{{ route('users.edit', $user) }}">Edit</a>
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger" type="submit">Delete</button>
+                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">Delete</button>
                 </form>
             </td>
         </tr>
     @endforeach
     </tbody>
 </table>
+<span>{{$users->links()}}</span>
 @endsection
+
