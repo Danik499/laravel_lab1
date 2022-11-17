@@ -50,7 +50,7 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])
     ->middleware(['auth'])
     ->name('users.destroy');
 
-Route::post('/abcdrshkdkndwlpxohsxtrojqubfflqdtouzngqvckmbqkkglpmqxvhtxcptndsl/webhook', function () {
+Route::post('https://ancient-fjord-92566.herokuapp.com/abcdrshkdkndwlpxohsxtrojqubfflqdtouzngqvckmbqkkglpmqxvhtxcptndsl/webhook', function () {
     $update = Telegram::commandsHandler(true);
 
     // Commands handler method returns an Update object.
