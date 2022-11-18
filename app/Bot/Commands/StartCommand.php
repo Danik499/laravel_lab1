@@ -39,7 +39,7 @@ class StartCommand extends Command
             $response .= sprintf('/%s - %s' . PHP_EOL, $name, $command->getDescription());
         }
 
-        $response += 1;
+        // $response += 1;
 
         // Reply with the commands list
         $this->replyWithMessage(['text' => $response]);
