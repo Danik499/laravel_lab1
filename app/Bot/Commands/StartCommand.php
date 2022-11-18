@@ -42,7 +42,7 @@ class StartCommand extends Command
         $response .= '\nasd';
 
         // Reply with the commands list
-        $this->replyWithMessage(['text' => $response]);
+        // $this->replyWithMessage(['text' => $response]);
 
         // Trigger another command dynamically from within this command
         // When you want to chain multiple commands within one or process the request further.
