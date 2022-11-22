@@ -53,6 +53,8 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])
 Route::post('/abcdrshkdkndwlpxohsxtrojqubfflqdtouzngqvckmbqkkglpmqxvhtxcptndsl/webhook', function () {
     $update = Telegram::commandsHandler(true);
 
+    $chatid = $update->message->chat->id;
+
     // Commands handler method returns an Update object.
     // So you can further process $update object
     // to however you want.
