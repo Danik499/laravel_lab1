@@ -19,9 +19,6 @@ class RegisterCommand extends Command
      */
     public function handle()
     {
-        $this->replyWithMessage(['text' => 'You are registered']);
-
-        // This will update the chat status to typing...
-        $this->replyWithChatAction(['action' => Actions::TYPING]);
+        $this->replyWithMessage(['text' => 'You are registered to Random Coffee']);
     }
 }
