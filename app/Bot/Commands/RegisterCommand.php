@@ -19,6 +19,7 @@ class RegisterCommand extends Command
      */
     public function handle()
     {
+        Telegram::commandsHandler(true);
         $this->replyWithMessage(['text' => 'You are registered to Random Coffee']);
     }
 }
