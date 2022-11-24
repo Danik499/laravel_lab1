@@ -31,33 +31,9 @@ Route::get('/dashboard', function () {
 Route::get('/users', [UserController::class, 'index'])
     ->middleware(['auth'])
     ->name('users.index');
-Route::get('/users/create', [UserController::class, 'create'])
-    ->middleware(['auth'])
-    ->name('users.create');
-Route::get('/users/{id}', [UserController::class, 'show'])
-    ->middleware(['auth'])
-    ->name('users.show');
-Route::post('/users', [UserController::class, 'store'])
-    ->middleware(['auth'])
-    ->name('users.store');
-Route::get('/users/{id}/edit', [UserController::class, 'edit'])
-    ->middleware(['auth'])
-    ->name('users.edit');
-Route::put('/users/{user}', [UserController::class, 'update'])
-    ->middleware(['auth'])
-    ->name('users.update');
-Route::delete('/users/{user}', [UserController::class, 'destroy'])
-    ->middleware(['auth'])
-    ->name('users.destroy');
 
 Route::post('/abcdrshkdkndwlpxohsxtrojqubfflqdtouzngqvckmbqkkglpmqxvhtxcptndsl/webhook', function () {
     $update = Telegram::commandsHandler(true);
-
-    $chatid = $update->message->chat->id;
-
-    // Commands handler method returns an Update object.
-    // So you can further process $update object
-    // to however you want.
 
     return 'ok';
 });

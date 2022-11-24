@@ -19,7 +19,9 @@ class RegisterCommand extends Command
      */
     public function handle()
     {
-        Telegram::commandsHandler(true);
-        $this->replyWithMessage(['text' => 'You are registered to Random Coffee']);
+        $telegramUpdate = $this->getUpdate();
+        $telegramChat = $telegramUpdate->getChat();
+        $telegramUser = $this->getMessage()->from;
+        $this->replyWithMessage(['text' => 'You are registered to Random Coffee - '.$telegramChat]);
     }
 }
