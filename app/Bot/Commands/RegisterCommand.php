@@ -21,7 +21,8 @@ class RegisterCommand extends Command
     {
         $telegramUpdate = $this->getUpdate();
         $telegramChat = $telegramUpdate->getChat();
-        $telegramUser = $this->getMessage()->from;
+        $telegramUser = $telegramUpdate->getMessage()->from;
+
         $this->replyWithMessage(['text' => 'You are registered to Random Coffee - '.$telegramChat]);
     }
 }
