@@ -4,6 +4,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/database/lab_1_db.sqlite
 .env
 .env.backup
 .phpunit.result.cache
