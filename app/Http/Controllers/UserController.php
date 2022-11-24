@@ -58,6 +58,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        // dd($user);
         return view('show', compact('user'));
     }
 
@@ -69,7 +70,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        // dd($user);
         return view('form', compact('user'));
     }
 
