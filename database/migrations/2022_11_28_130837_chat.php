@@ -13,11 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chats', function (Blueprint $table) {
-            $table->id();
-            $table->string('chat_id');
-            $table->json('participants');
-        });
+        //
     }
 
     /**
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::drop('chats');
+        //
     }
 };

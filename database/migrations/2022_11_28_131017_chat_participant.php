@@ -13,11 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('participant', function (Blueprint $table) {
-            $table->id();
-            $table->string('telegram_user_id');
-            $table->string('name');
-        });
+        //
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Bot\Commands;
 
 use App\Models\Chat;
-use App\Models\Chat_Participant;
+use App\Models\ChatParticipant;
 use Telegram\Bot\Commands\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -20,16 +20,11 @@ class UnregisterCommand extends Command
         $telegramChat = $telegramUpdate->getChat();
         $telegramUser = $telegramUpdate->getMessage()->from;
 
-        try {
+        Chat::unregisterChat($telegramChat->id);
 
-            Chat::unregisterChat($telegramChat->id);
+        ChatParticipant::unregisterMember($telegramUser->id);
 
-            Chat_Participant::unregisterMember($telegramUser->id);
-
-            $this->replyWithMessage(['text' => 'Done']);
-        } catch (\Exception $exception) {
-            $this->replyWithMessage(['text' => "Oops... Something went wrong. {$exception->getMessage()}"]);
-        }
+        $this->replyWithMessage(['text' => 'Done']);
 
     }
 }

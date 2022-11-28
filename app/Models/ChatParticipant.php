@@ -35,6 +35,16 @@ class Chat_Participant extends Model
                             ->inRandomOrder()
                             ->get();
 
+        $pairs = [];
 
+        for ($i = 1; $i < count($participants); $i += 2) {
+            array_push($pairs, [$participants[$i-1], $participants[$i]]);
+        }
+
+        if (count($participants) % 2 != 0) {
+            array_push($pairs[count($pairs) - 1], end($participants));
+        }
+
+        return $pairs;
     }
 }

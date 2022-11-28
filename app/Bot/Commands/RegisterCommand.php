@@ -3,7 +3,7 @@
 namespace App\Bot\Commands;
 
 use App\Models\Chat;
-use App\Models\Chat_Participant;
+use App\Models\ChatParticipant;
 use Telegram\Bot\Commands\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -20,26 +20,23 @@ class RegisterCommand extends Command
         $telegramChat = $telegramUpdate->getChat();
         $telegramUser = $telegramUpdate->getMessage()->from;
 
-        try {
-            $chat = Chat::query()
-                ->where('chat_id', '=', $telegramChat->id)
-                ->get()
-                ->first();
 
-            if(!$chat)
-                Chat::registerChat($telegramChat->id);
+        $chat = Chat::query()
+            ->where('chat_id', '=', $telegramChat->id)
+            ->get()
+            ->first();
 
-                Chat_Participant::registerMember(
-                    $telegramUser->id,
-                    $telegramUser->firstName,
-                    $telegramUser->lastName,
-                    $telegramChat->id
-            );
+        if(!$chat)
+            Chat::registerChat($telegramChat->id);
 
-            $this->replyWithMessage(['text' => 'Done']);
-        } catch (\Exception $exception) {
-            $this->replyWithMessage(['text' => "Oops... Something went wrong. {$exception->getMessage()}"]);
-        }
+            ChatParticipant::registerMember(
+                $telegramUser->id,
+                $telegramUser->firstName,
+                $telegramUser->lastName,
+                $telegramChat->id
+        );
+
+        $this->replyWithMessage(['text' => 'Done']);
 
 }
 }
