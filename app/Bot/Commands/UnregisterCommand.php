@@ -1,24 +1,35 @@
 <?php
+
 namespace App\Bot\Commands;
 
-use Telegram\Bot\Actions;
+use App\Models\Chat;
+use App\Models\Chat_Participant;
 use Telegram\Bot\Commands\Command;
+use Illuminate\Support\Facades\DB;
 
 class UnregisterCommand extends Command
 {
-    /* @var string Command Name
-     */
+
     protected $name = "unregister";
 
-    /* @var string Command Description
-     */
-    protected $description = "Unregister from Random Coffee";
+    protected $description = "Unregister Command to remove you from RandomCoffee";
 
-    /**
-     * @inheritdoc
-     */
     public function handle()
     {
-        $this->replyWithMessage(['text' => 'You are unregistered from Random Coffee']);
+        $telegramUpdate = $this->getUpdate();
+        $telegramChat = $telegramUpdate->getChat();
+        $telegramUser = $telegramUpdate->getMessage()->from;
+
+        try {
+
+            Chat::unregisterChat($telegramChat->id);
+
+            Chat_Participant::unregisterMember($telegramUser->id);
+
+            $this->replyWithMessage(['text' => 'Done']);
+        } catch (\Exception $exception) {
+            $this->replyWithMessage(['text' => "Oops... Something went wrong. {$exception->getMessage()}"]);
+        }
+
     }
 }

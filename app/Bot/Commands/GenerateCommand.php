@@ -1,24 +1,38 @@
 <?php
+
 namespace App\Bot\Commands;
 
-use Telegram\Bot\Actions;
+use App\Models\Chat;
+use App\Models\Chat_Participant;
 use Telegram\Bot\Commands\Command;
+use Illuminate\Support\Facades\DB;
 
 class GenerateCommand extends Command
 {
-    /* @var string Command Name
-     */
+
     protected $name = "generate";
 
-    /* @var string Command Description
-     */
-    protected $description = "Generate list with pairs";
+    protected $description = "Generate Command to select coffee pairs";
 
-    /**
-     * @inheritdoc
-     */
     public function handle()
     {
-        $this->replyWithMessage(['text' => 'Generating...']);
+        $telegramUpdate = $this->getUpdate();
+        $telegramChat = $telegramUpdate->getChat();
+
+        $participantsNumber = DB::table('chat_participants')
+                                    ->where('chat_id', '=', $telegramChat->id)
+                                    ->count();
+
+        if($participantsNumber >= 2)
+            try {
+                Chat_Participant::getRandomPairs($telegramChat->id);
+
+                $this->replyWithMessage(['text' => 'Done']);
+            } catch (\Exception $exception) {
+                $this->replyWithMessage(['text' => "Oops... Something went wrong. {$exception->getMessage()}"]);
+            }
+        else
+            $this->replyWithMessage(['text' => "Number of participants is less than two"]);
+
     }
 }
