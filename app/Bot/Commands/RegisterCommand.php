@@ -1,42 +1,45 @@
 <?php
+
 namespace App\Bot\Commands;
 
 use App\Models\Chat;
-use App\Models\ChatParticipant;
-
-use Telegram\Bot\Actions;
+use App\Models\Chat_Participant;
 use Telegram\Bot\Commands\Command;
+use Illuminate\Support\Facades\DB;
 
 class RegisterCommand extends Command
 {
-    /* @var string Command Name
-     */
+
     protected $name = "register";
 
-    /* @var string Command Description
-     */
-    protected $description = "Register to Random Coffee";
+    protected $description = "Register Command to add you to Random Coffee";
 
-    /**
-     * @inheritdoc
-     */
     public function handle()
     {
         $telegramUpdate = $this->getUpdate();
         $telegramChat = $telegramUpdate->getChat();
         $telegramUser = $telegramUpdate->getMessage()->from;
 
-        $chat = Chat::query()
-            ->where('chat_id', '=', $telegramChat->id)
-            ->get()
-            ->first();
+        try {
+            $chat = Chat::query()
+                ->where('chat_id', '=', $telegramChat->id)
+                ->get()
+                ->first();
 
-        if (!$chat) {
-            Chat::create([
+            if(!$chat)
+                Chat::registerChat($telegramChat->id);
 
-            ]);
+                Chat_Participant::registerMember(
+                    $telegramUser->id,
+                    $telegramUser->firstName,
+                    $telegramUser->lastName,
+                    $telegramChat->id
+            );
+
+            $this->replyWithMessage(['text' => 'Done']);
+        } catch (\Exception $exception) {
+            $this->replyWithMessage(['text' => "Oops... Something went wrong. {$exception->getMessage()}"]);
         }
 
-        $this->replyWithMessage(['text' => 'You are registered to Random Coffee - '.$telegramChat]);
-    }
+}
 }
